@@ -1,0 +1,15 @@
+# dataset
+data/*
+
+# notebook
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# IPython & python
+profile_default/
+ipython_config.py
+*/__pycache__/*
+
+# downloaded and saved models
+*.pt
+*/ModelSaveTensorFlow/*
