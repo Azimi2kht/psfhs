@@ -8,8 +8,9 @@ data/*
 # IPython & python
 profile_default/
 ipython_config.py
-*__pycache__*
+*.pyc
 
 # downloaded and saved models
 *.pt
+*.pth
 */ModelSaveTensorFlow/*

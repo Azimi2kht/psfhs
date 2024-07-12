@@ -36,7 +36,7 @@ def load_data(img_height, img_width, images_to_be_loaded, dataset):
         image = np.asarray(imread(image_path)).transpose(1, 2, 0)
         mask = np.asarray(imread(mask_path))
 
-        X_train[n] = image / 255
+        X_train[n] = image
        
         # mask_threshold = 127
         # mask[:, :] = np.where(mask_[:, :, 0] >= mask_threshold, 1, 0)
