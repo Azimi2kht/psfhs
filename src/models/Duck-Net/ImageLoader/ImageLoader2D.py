@@ -1,26 +1,23 @@
 import glob
-
+from itk import imread
 import numpy as np
 from PIL import Image
-from skimage.io import imread
 from matplotlib import pyplot as plt
 from tqdm import tqdm
+import os
 
-folder_path = "/content/drive/MyDrive/Learning/University/bc_project/M.Sobhaninia/polyp/DUCK-Net-main/dataset/Kvasir-SEG/"  # Add the path to your data directory
+
+folder_path = "/home/azimi2kht/projects/psfh/data/raw/PSFHS/"  # Add the path to your data directory
 
 
 def load_data(img_height, img_width, images_to_be_loaded, dataset):
-    IMAGES_PATH = folder_path + 'images/'
-    MASKS_PATH = folder_path + 'masks/'
+    IMAGES_PATH = folder_path + 'image_mha/'
+    MASKS_PATH = folder_path + 'label_mha/'
 
-    if dataset == 'kvasir':
-        train_ids = glob.glob(IMAGES_PATH + "*.jpg")
+    train_ids = []
 
-    if dataset == 'cvc-clinicdb':
-        train_ids = glob.glob(IMAGES_PATH + "*.tif")
-
-    if dataset == 'cvc-colondb' or dataset == 'etis-laribpolypdb':
-        train_ids = glob.glob(IMAGES_PATH + "*.png")
+    if dataset == 'psfhs':
+        train_ids = glob.glob(IMAGES_PATH + "*.mha")
 
     if images_to_be_loaded == -1:
         images_to_be_loaded = len(train_ids)
@@ -34,10 +31,10 @@ def load_data(img_height, img_width, images_to_be_loaded, dataset):
             break
 
         image_path = id_
-        mask_path = image_path.replace("images", "masks")
+        mask_path = image_path.replace("image", "label")
 
-        image = imread(image_path)
-        mask_ = imread(mask_path)
+        image = np.asarray(imread(image_path)).transpose(1, 2, 0)
+        mask_ = np.asarray(imread(mask_path))
 
         mask = np.zeros((img_height, img_width), dtype=np.bool_)
 
@@ -54,13 +51,8 @@ def load_data(img_height, img_width, images_to_be_loaded, dataset):
         
         mask_ = np.array(pillow_mask)
         
-        # mask_threshold = 127
-        # mask[:, :] = np.where(mask_[:, :, 0] >= mask_threshold, 1, 0)
-
-        for i in range(img_height):
-            for j in range(img_width):
-                if mask_[i, j, 0] >= 127:
-                    mask[i, j] = 1
+        mask_threshold = 127
+        mask[:, :] = np.where(mask_[:, :, 0] >= mask_threshold, 1, 0)
 
         Y_train[n] = mask
 
